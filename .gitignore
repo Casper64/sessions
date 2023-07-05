@@ -1,0 +1,8 @@
+
+*.exe
+examples/examples
+
+.idea/*
+.vscode/*
+
+*.db
