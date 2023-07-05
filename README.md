@@ -6,6 +6,17 @@ This module contains 2 options for storing data: in a database and in memory, bu
 is possible to define your own store to use with other backends like redis
 (see [Custom Stores](#implementing-your-own-store)).
 
+## How it works
+
+1. When a user visits a page and has no session id cookie set a new session is created.
+The cookie is the hmac of the session id and a secret value.
+2. If the cookie is set and the hmac is valid the session store will be checked to see
+if there is already a data record for that session.
+3. If there is no data record present it means that the session is expired so a new
+sesion is created.
+4. Ultimately the data record for that session is set on vweb's context and can retrieved or
+set in the route handler.
+
 ## Usage
 
 See [examples](examples/main.v).
