@@ -144,7 +144,7 @@ sessions.Session.create(sessions.MemoryStore[User]{}, secret: 'my-secret')
 
 ### DatabaseStore
 
-> **Note:** the DatabaseStore does not work yet, because of some generic orm issue in V see
+> **Note**: the DatabaseStore does not work yet, because of some generic orm issue in V see
 > [#18788](https://github.com/vlang/v/issues/18788).
 
 Use the `DatabaseStore` to store session data in a database.
