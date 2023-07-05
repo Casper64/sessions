@@ -8,7 +8,7 @@ is possible to define your own store to use with other backends like redis
 
 ## How it works
 
-1. When a user visits a page and has no session id cookie set a new session is created.
+1. When a user visits a page and has no session id cookie set, a new session is created.
 The cookie is the hmac of the session id and a secret value.
 2. If the cookie is set and the hmac is valid the session store will be checked to see
 if there is already a data record for that session.
