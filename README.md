@@ -107,11 +107,20 @@ pub fn (mut app App) index() vweb.Result {
 We can easily retrieve the data from vweb's context.
 
 **Example:**
-```v
+```v ignore
 pub fn (mut app App) user() vweb.Result {
 	user := app.get_value[User]('user') or { User{} }
 	return app.json(user)
 }
+```
+
+### Getting the session id
+
+The session id gets set by `Session.use` on vweb's context with the key `'session_id'`.
+
+**Example**:
+```v ignore
+sid := app.get_value[string]('session_id') or { '' }
 ```
 
 ## Stores
