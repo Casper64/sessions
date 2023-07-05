@@ -1,7 +1,10 @@
 module sessions
 
+// MemoryStore stores session data in memory
+[heap]
 pub struct MemoryStore[T] {
 mut:
+	// TODO: implement via LRU cache
 	data map[string]T
 }
 

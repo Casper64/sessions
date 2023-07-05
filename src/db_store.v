@@ -8,8 +8,28 @@ pub mut:
 	data T
 }
 
+pub fn (u DbUser[T]) str() string {
+	return 'User(session_id=${u.id}, data=${u.data})'
+}
+
+// DatabaseStore stores session data in a database
+[heap]
 pub struct DatabaseStore[T] {
 	db orm.Connection
+}
+
+pub fn DatabaseStore.create[T](db orm.Connection) &DatabaseStore[T] {
+	mut store := &DatabaseStore[T]{
+		db: db
+	}
+	store.init() or { panic(err) }
+	return store
+}
+
+pub fn (mut store DatabaseStore[T]) init() ! {
+	sql store.db {
+		create table DbUser[T]
+	}!
 }
 
 pub fn (store &DatabaseStore[T]) all() []T {
@@ -48,7 +68,7 @@ pub fn (mut store DatabaseStore[T]) set(sid string, val T) {
 	}
 
 	if rows.len == 0 {
-		// create record
+		// record does not exist yet
 		sql store.db {
 			insert user into DbUser[T]
 		} or { eprintln(err) }
@@ -64,6 +84,6 @@ pub fn (mut store DatabaseStore[T]) set(sid string, val T) {
 pub fn (mut store DatabaseStore[T]) clear() {
 	// TODO: generic structs don't work with deleting all
 	sql store.db {
-		delete from DbUser[T] where id != '2'
+		delete from DbUser[T] where id != ''
 	} or {}
 }

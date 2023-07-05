@@ -1,6 +1,7 @@
 
 *.exe
 examples/examples
+examples/minimal
 
 .idea/*
 .vscode/*

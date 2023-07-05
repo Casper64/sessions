@@ -26,9 +26,6 @@ pub mut:
 ['/'; get]
 pub fn (mut app App) index() vweb.Result {
 	users := app.sessions.all()
-
-	println(app.sessions)
-
 	return $vweb.html()
 }
 
@@ -55,29 +52,37 @@ pub fn (mut app App) register_user(name string) vweb.Result {
 ['/user']
 pub fn (mut app App) user() vweb.Result {
 	user := app.get_value[User]('user') or { User{} }
-	if user.authenticated == false {
-		app.set_status(401, '')
-		return app.text('HTTP 401: unauthorized. You are nog logged in yet!')
-	}
-
 	return $vweb.html()
 }
 
-fn main() {
-	db := sqlite.connect('sessions.db')!
+// middleware function
+fn authenticated(mut ctx vweb.Context) bool {
+	user := ctx.get_value[User]('user') or { User{} }
 
-	mut s := sessions.session(sessions.MemoryStore[User]{}, secret: secret)
-	// mut s := sessions.session(sessions.DatabaseStore[User]{
-		// db: db
-	// },
+	if user.authenticated == false {
+		ctx.set_status(401, '')
+		ctx.text('HTTP 401: unauthorized. You are nog logged in yet!')
+		return false
+	}
+	return true
+}
+
+fn main() {
+	// Uncomment below to use the Database Store for persistent session storage
+	// db := sqlite.connect('sessions.db')!
+	// mut s := sessions.session(sessions.DatabaseStore.create[User](db),
 	// 	secret: secret
 	// )
+
+	// Use the memory storage
+	mut s := sessions.Session.create(sessions.MemoryStore[User]{}, secret: secret)
 
 	mut app := &App{
 		sessions: s
 		middlewares: {
-			'/': [s.use]
-			// '/user': [s.required]
+			'/':     [s.use]
+			// when a user visits '/user' first `s.use` is fired to then `authenticated`
+			'/user': [authenticated]
 		}
 	}
 
