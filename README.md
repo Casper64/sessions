@@ -8,8 +8,8 @@ is possible to define your own store to use with other backends like redis
 
 ## ToDo
 
+- [X] Use LRU-cache instead of plain `map` for the `MemoryStore`
 - [ ] Fix `DatabaseStore` bugs
-- [ ] Use LRU-cache instead of `map` for the `MemoryStore`
 - [ ] Add tests
 
 ## How it works
@@ -54,8 +54,8 @@ pub mut:
 }
 
 fn main() {
-    // create the Session object
-	mut s := sessions.Session.create(sessions.MemoryStore[User]{}, secret: secret)
+    // create the Session object with a maximum of 100 entries for the memorystore
+	mut s := sessions.Session.create(sessions.MemoryStore.create[User](100), secret: secret)
 
 	mut app := &App{
 		sessions: s
@@ -146,7 +146,8 @@ There are 2 stores that you can use to store session data:
 
 ### MemoryStore
 
-Use the `MemoryStore` to store session data in RAM.
+Use the `MemoryStore` to store session data in RAM. The first argument is the maximum
+number of entries that can be stored in the cache.
 
 Pros
 - Fast read and write speeds
@@ -156,7 +157,7 @@ Cons
 
 **Example:**
 ```v ignore
-sessions.Session.create(sessions.MemoryStore[User]{}, secret: 'my-secret')
+sessions.Session.create(sessions.MemoryStore.create[User](100), secret: 'my-secret')
 ```
 
 ### DatabaseStore
@@ -191,9 +192,9 @@ If you store implements the `Store` interface you can use it.
 ```v ignore
 
 pub interface Store[T] {
+mut:
 	all() []T
 	get(sid string) ?T
-mut:
 	destroy(sid string)
 	clear()
 	set(sid string, val T)
