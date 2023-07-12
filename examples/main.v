@@ -75,7 +75,10 @@ fn main() {
 	// )
 
 	// Use the memory storage
-	mut s := sessions.Session.create(sessions.MemoryStore[User]{}, secret: secret)
+
+	mut s := sessions.Session.create(sessions.MemoryStore.create[User](100),
+		secret: secret
+	)
 
 	mut app := &App{
 		sessions: s

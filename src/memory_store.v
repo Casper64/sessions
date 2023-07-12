@@ -5,31 +5,38 @@ module sessions
 pub struct MemoryStore[T] {
 mut:
 	// TODO: implement via LRU cache
-	data map[string]T
+	lru LRUCache[T]
 }
 
 pub fn (store &MemoryStore[T]) all() []T {
-	return store.data.values()
+	return store.lru.cache.values().map(it.val)
 }
 
-pub fn (store &MemoryStore[T]) get(sid string) ?T {
-	if val := store.data[sid] {
-		return val
-	}
-	return none
+pub fn (mut store MemoryStore[T]) get(sid string) ?T {
+	return store.lru.get(sid)
 }
 
 pub fn (mut store MemoryStore[T]) destroy(sid string) {
-	store.data.delete(sid)
+	if v := store.lru.cache[sid] {
+		store.lru.remove(v)
+		store.lru.cache.delete(sid)
+	}
 }
 
 pub fn (mut store MemoryStore[T]) set(sid string, val T) {
-	store.data[sid] = val
+	store.lru.put(sid, val)
 }
 
 pub fn (mut store MemoryStore[T]) clear() {
-	keys := store.data.keys()
+	keys := store.lru.cache.keys()
 	for key in keys {
-		store.data.delete(key)
+		store.destroy(key)
 	}
+}
+
+pub fn MemoryStore.create[T](capacity int) &MemoryStore[T] {
+	mut store := &MemoryStore[T]{
+		lru: LRUCache.create[T](capacity)
+	}
+	return store
 }

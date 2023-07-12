@@ -106,12 +106,12 @@ pub fn (s &Session[T]) logout(mut ctx vweb.Context) {
 // Store implementations:
 
 // all retrieves all session data
-pub fn (s &Session[T]) all() []T {
+pub fn (mut s Session[T]) all() []T {
 	return s.store.all()
 }
 
 // get the current session data
-pub fn (s &Session[T]) get(ctx vweb.Context) ?T {
+pub fn (mut s Session[T]) get(ctx vweb.Context) ?T {
 	sid := s.get_session_id(ctx)?
 	return s.store.get(sid)
 }
