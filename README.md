@@ -6,6 +6,12 @@ This module contains 2 options for storing data: in a database and in memory, bu
 is possible to define your own store to use with other backends like redis
 (see [Custom Stores](#implementing-your-own-store)).
 
+## ToDo
+
+- [ ] Fix `DatabaseStore` bugs
+- [ ] Use LRU-cache instead of `map` for the `MemoryStore`
+- [ ] Add tests
+
 ## How it works
 
 1. When a user visits a page and has no session id cookie set, a new session is created.
