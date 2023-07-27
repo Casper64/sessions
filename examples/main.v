@@ -75,7 +75,7 @@ fn main() {
 	// )
 
 	// Use the memory storage with a maximum of 100 entries
-	mut s := sessions.Sesson.create(sessions.MemoryStore.create[User](100),
+	mut s := sessions.Session.create(sessions.MemoryStore.create[User](100),
 		secret: secret
 	)
 
