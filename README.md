@@ -9,7 +9,7 @@ is possible to define your own store to use with other backends like redis
 ## ToDo
 
 - [X] Use LRU-cache instead of plain `map` for the `MemoryStore`
-- [ ] Fix `DatabaseStore` bugs
+- [X] Fix `DatabaseStore` bugs
 - [ ] Add tests
 
 ## How it works
@@ -162,8 +162,8 @@ sessions.Session.create(sessions.MemoryStore.create[User](100), secret: 'my-secr
 
 ### DatabaseStore
 
-> **Note**: the DatabaseStore does not work yet, because of some generic orm issue in V see
-> [#18788](https://github.com/vlang/v/issues/18788).
+> **Note**: The database store encodes and decodes your data with JSON under the hood.
+> You could create your custom store and hardcode the types to make it work using orm only.
 
 Use the `DatabaseStore` to store session data in a database.
 

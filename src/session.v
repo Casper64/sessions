@@ -83,7 +83,6 @@ pub fn (mut s Session[T]) use(mut ctx vweb.Context) bool {
 }
 
 // Util:
-
 pub fn (s &Session[T]) get_session_id(ctx vweb.Context) ?string {
 	if sid := ctx.get_value[string]('session_id') {
 		return sid

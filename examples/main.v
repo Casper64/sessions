@@ -70,12 +70,12 @@ fn authenticated(mut ctx vweb.Context) bool {
 fn main() {
 	// Uncomment below to use the Database Store for persistent session storage
 	// db := sqlite.connect('sessions.db')!
-	// mut s := sessions.session(sessions.DatabaseStore.create[User](db),
+	// mut s := sessions.Session.create(sessions.DatabaseStore.create[User](db),
 	// 	secret: secret
 	// )
 
 	// Use the memory storage with a maximum of 100 entries
-	mut s := sessions.Session.create(sessions.MemoryStore.create[User](100),
+	mut s := sessions.Sesson.create(sessions.MemoryStore.create[User](100),
 		secret: secret
 	)
 
